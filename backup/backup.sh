@@ -72,4 +72,4 @@ zip -r $BACKUP_PATH/$BACKUP_NAME.zip $BACKUP_NAME
 timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
 echo "clean tmp files"
 rm -rf $BACKUP_TMP_DIR
-echo "successfully end: "$timestamp
+echo "backup file: $BACKUP_PATH/$BACKUP_NAME.zip was successfully created on: $timestamp"
