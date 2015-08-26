@@ -51,6 +51,11 @@ mkdir -p $APT_PACKAGE
 dpkg -l >  $APT_PACKAGE/packages.list
 cp -R /etc/apt/sources.list* $APT_PACKAGE/
 apt-key exportall > $APT_PACKAGE/repo.keys
+# virtuoso
+echo "virtuoso"
+BACKUP_DIR_VIRTUOSO=$BACKUP_TMP_DIR/virtuoso
+mkdir -p $BACKUP_DIR_VIRTUOSO
+zip -r $BACKUP_DIR_VIRTUOSO/virtuoso.zip /var/lib/virtuoso-opensource-7
 # final backup file
 echo "create backup file: $BACKUP_NAME"
 cd $BACKUP_PATH
