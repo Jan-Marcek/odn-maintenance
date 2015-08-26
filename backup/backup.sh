@@ -42,6 +42,7 @@ zip -r  $BACKUP_DIR_CONF/conf.zip /etc/default/tomcat7  /etc/apache2  /etc/odn-c
 echo "idm"
 BACKUP_DIR_IDM=$BACKUP_TMP_DIR/idm
 mkdir -p $BACKUP_DIR_IDM
+zip -r $BACKUP_DIR_IDM/midpoint.home.zip /var/lib/midpoint.home
 su - postgres -c "pg_dump midpoint --inserts" > $BACKUP_DIR_IDM/midpoint.sql
 # apt debian packages
 echo "apt debian packages"
