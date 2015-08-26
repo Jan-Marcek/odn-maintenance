@@ -1,33 +1,53 @@
 #!/bin/bash
-BACKUP_DIR=/tmp/backup
+set -e
+# set where BACKUP shall be placed
+BACKUP_PATH=$1
 timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
+BACKUP_NAME=odn_backup_$timestamp
 echo "start: "$timestamp
-BACKUP_DIR=/tmp/backup_$timestamp
-mkdir -p $BACKUP_DIR
-BACKUP_DIR_UV=$BACKUP_DIR/unifiedviews
+BACKUP_TMP_DIR=$BACKUP_PATH/$BACKUP_NAME
+mkdir -p $BACKUP_TMP_DIR
+# unifiedviews
+echo "unifiedviews"
+BACKUP_DIR_UV=$BACKUP_TMP_DIR/unifiedviews
 mkdir -p $BACKUP_DIR_UV
-#zip $BACKUP_DIR_UV/backend-init.zip  /etc/init.d/unifiedviews-backend /etc/unifiedviews/unifiedviews.conf /usr/sbin/run_unifiedviews_backend
 zip -r $BACKUP_DIR_UV/dpus.zip /var/lib/unifiedviews/common
-#zip -r $BACKUP_DIR_UV/binaries.zip /usr/share/unifiedviews
 su - postgres -c "pg_dump unifiedviews --inserts" > $BACKUP_DIR_UV/unifiedviews.sql
-BACKUP_DIR_CKAN=$BACKUP_DIR/ckan
+# ckan ic, pc,  datastore-odn-ic, datastore-odn-pc
+echo "ckan"
+BACKUP_DIR_CKAN=$BACKUP_TMP_DIR/ckan
 mkdir -p $BACKUP_DIR_CKAN
 /usr/share/python/odn-ckan-shared/bin/paster --plugin=ckan db dump $BACKUP_DIR_CKAN/odn-ckan-ic.sql -c /etc/odn-simple/odn-ckan-ic/production.ini
 /usr/share/python/odn-ckan-shared/bin/paster --plugin=ckan db dump $BACKUP_DIR_CKAN/odn-ckan-pc.sql -c /etc/odn-simple/odn-ckan-pc/production.ini
-
-BACKUP_DIR_LDAP=$BACKUP_DIR/ldap
+su - postgres -c "pg_dump datastore-odn-ic --inserts" > $BACKUP_DIR_CKAN/datastore-odn-ic.sql
+su - postgres -c "pg_dump datastore-odn-pc --inserts" > $BACKUP_DIR_CKAN/datastore-odn-pc.sql
+# ldap
+echo "LDAP"
+BACKUP_DIR_LDAP=$BACKUP_TMP_DIR/ldap
 mkdir -p $BACKUP_DIR_LDAP
-zip -r $BACKUP_DIR_LDAP /var/lib/ldap_odn
-
-BACKUP_DIR_CONF=$BACKUP_DIR/conf
+zip -r $BACKUP_DIR_LDAP/ldap.zip /var/lib/ldap_odn
+# conf
+echo "conf"
+BACKUP_DIR_CONF=$BACKUP_TMP_DIR/conf
 mkdir -p $BACKUP_DIR_CONF
-zip -r  $BACKUP_DIR_CONF /etc/default/tomcat7  /etc/apache2  /etc/odn-cas /etc/odn-midpoint  /etc/odn-simple  /etc/odn-solr  /etc/unfiedviews
-
-DEB_ODN=$BACKUP_DIR/deb
-mkdir -p $DEB_ODN
-DEB_ALL=$DEB_ODN/deb_all
-touch $DEB_ALL
-dpkg -l >  $DEB_ALL
-
+zip -r  $BACKUP_DIR_CONF/conf.zip /etc/default/tomcat7  /etc/apache2  /etc/odn-cas /etc/odn-midpoint  /etc/odn-simple  /etc/odn-solr  /etc/unfiedviews
+# idm
+echo "idm"
+BACKUP_DIR_IDM=$BACKUP_TMP_DIR/idm
+mkdir -p $BACKUP_DIR_IDM
+su - postgres -c "pg_dump midpoint --inserts" > $BACKUP_DIR_IDM/midpoint.sql
+# apt debian packages
+echo "apt debian packages"
+APT_PACKAGE=$BACKUP_TMP_DIR/deb
+mkdir -p $APT_PACKAGE
+dpkg -l >  $APT_PACKAGE/packages.list
+cp -R /etc/apt/sources.list* $APT_PACKAGE/
+apt-key exportall > $APT_PACKAGE/repo.keys
+# final backup file
+echo "create backup file: $BACKUP_NAME"
+cd $BACKUP_PATH
+zip -r $BACKUP_PATH/$BACKUP_NAME.zip $BACKUP_NAME
 timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
+echo "clean tmp files"
+rm -rf $BACKUP_TMP_DIR
 echo "successfully end: "$timestamp
