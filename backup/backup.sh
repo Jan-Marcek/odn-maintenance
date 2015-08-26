@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 # set where BACKUP shall be placed
+if [ $# -eq 0 ]
+  then
+    echo "ERROR: Path where backup file will be placed is missing"
+    echo "example of usage:  ./backup /opt/"
+    exit -1
+fi
+
 BACKUP_PATH=$1
 timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
 BACKUP_NAME=odn_backup_$timestamp
