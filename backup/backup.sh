@@ -8,6 +8,11 @@ if [ $# -eq 0 ]
     exit -1
 fi
 
+if [ ! -d "$1" ]; then
+    echo "ERROR: $1 is file or directory is not exist"
+    exit -1
+fi
+
 BACKUP_PATH=$1
 timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
 BACKUP_NAME=odn_backup_$timestamp
