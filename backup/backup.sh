@@ -20,14 +20,23 @@ BACKUP_DIR_UV=$BACKUP_TMP_DIR/unifiedviews
 mkdir -p $BACKUP_DIR_UV
 zip -r $BACKUP_DIR_UV/dpus.zip /var/lib/unifiedviews/common
 su - postgres -c "pg_dump unifiedviews --inserts" > $BACKUP_DIR_UV/unifiedviews.sql
-# ckan ic, pc,  datastore-odn-ic, datastore-odn-pc
+# ckan ic, pc,  
 echo "ckan"
 BACKUP_DIR_CKAN=$BACKUP_TMP_DIR/ckan
 mkdir -p $BACKUP_DIR_CKAN
 /usr/share/python/odn-ckan-shared/bin/paster --plugin=ckan db dump $BACKUP_DIR_CKAN/odn-ckan-ic.sql -c /etc/odn-simple/odn-ckan-ic/production.ini
 /usr/share/python/odn-ckan-shared/bin/paster --plugin=ckan db dump $BACKUP_DIR_CKAN/odn-ckan-pc.sql -c /etc/odn-simple/odn-ckan-pc/production.ini
+# datastore-odn-ic, datastore-odn-pc
 su - postgres -c "pg_dump datastore-odn-ic --inserts" > $BACKUP_DIR_CKAN/datastore-odn-ic.sql
 su - postgres -c "pg_dump datastore-odn-pc --inserts" > $BACKUP_DIR_CKAN/datastore-odn-pc.sql
+# filestore-odn-ic, filestore-odn-pc 
+zip -r $BACKUP_DIR_CKAN/filestore-odn-ic.zip /var/lib/odn-ckan-ic/
+zip -r $BACKUP_DIR_CKAN/filestore-odn-pc.zip /var/lib/odn-ckan-pc/
+# dumps
+echo "dumps"
+BACKUP_DIR_DUMP=$BACKUP_TMP_DIR/dump
+mkdir -p $BACKUP_DIR_DUMP
+zip -r $BACKUP_DIR_DUMP/dumps.zip  /var/www/dump
 # ldap
 echo "LDAP"
 BACKUP_DIR_LDAP=$BACKUP_TMP_DIR/ldap
