@@ -40,6 +40,9 @@ cp theme/odn_theme_promoted.html /usr/share/python/odn-ckan-shared/lib/python2.7
 cp theme/odn_theme.css /usr/share/python/odn-ckan-shared/lib/python2.7/site-packages/ckanext/odn_theme/public/css/odn_theme.css
 cp theme/header.html /usr/share/python/odn-ckan-shared/lib/python2.7/site-packages/ckanext/odn_theme/templates/header.html
 cp theme/messages.properties  /usr/share/odn-cas/webapps/cas/WEB-INF/classes/messages.properties
-cp odn-simple-ssl /etc/apache2/sites-enabled/odn-simple-ssl
+sed -i "s/SSLCertificateFile  .*/SSLCertificateFile   \/etc\/apache2\/ssl\/STAR_comsode_eu.crt/"  /etc/apache2/sites-enabled/odn-simple-ssl
+sed -i "s/SSLCertificateKeyFile .*/SSLCertificateKeyFile   \/etc\/apache2\/ssl\/comsode.eu-key.pem \n  SSLCertificateChainFile     \/etc\/apache2\/ssl\/comodo-CA-bundle.crt/"  /etc/apache2/sites-enabled/odn-simple-ssl
+
+
 service odn-cas restart
 service apache2 restart
