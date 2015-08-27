@@ -75,7 +75,7 @@ mkdir -p $BACKUP_DIR_VIRTUOSO
 tar -zcvpf  $BACKUP_DIR_VIRTUOSO/virtuoso.tar.gz /var/lib/virtuoso-opensource-7
 # vocab
 BACKUP_DIR_VOCAB=$BACKUP_TMP_DIR/vocab
-if [ -d /var/www/vocab]; then 
+if [ -d /var/www/vocab ]; then 
     echo "vocab"
     mkdir -p $BACKUP_DIR_VOCAB
     tar -zcvpf  $BACKUP_DIR_VOCAB/vocab.tar.gz /var/www/vocab
