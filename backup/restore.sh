@@ -34,7 +34,7 @@ cat $PACKAGE_LIST  | grep virtuoso-opensource | awk '{ print $2"="$3; }' >> $APT
 cat $PACKAGE_LIST  | grep gettext| awk '{ print $2; }' >> $APT_PACKAGES_DEPENDENCIES
 cat $PACKAGE_LIST  | grep odn-simple| awk '{ print $2"="$3; }' >> $APT_PACKAGES_DEPENDENCIES
 cat $PACKAGE_LIST  | grep slapd | awk '{ print $2; }' >> $APT_PACKAGES_DEPENDENCIES
-aptitude install -V $(cat $APT_PACKAGES_DEPENDENCIES | awk '{print $1}')
+aptitude install -y -V $(cat $APT_PACKAGES_DEPENDENCIES | awk '{print $1}')
 
 CKAN_DIR=$BACKUP_DIR/ckan
 # odn-ckan-ic
