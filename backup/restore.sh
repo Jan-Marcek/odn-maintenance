@@ -68,7 +68,7 @@ service slapd restart
 tar -xvf $BACKUP_DIR/conf/conf.tar.gz -C /
 service odn-midpoint stop
 # idm 
-tar -xvf $BACKUP_DIR/idm/midpoint.tar.gz -C /
+tar -xvf $BACKUP_DIR/idm/midpoint.home.tar.gz -C /
 su - postgres -c "dropdb midpoint" 
 su - postgres -c "createdb  -O administrator midpoint" 
 su - postgres -c "psql -d midpoint" <  $BACKUP_DIR/idm/midpoint.sql
