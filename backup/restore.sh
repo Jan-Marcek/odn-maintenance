@@ -1,8 +1,20 @@
 #!/bin/bash
 set -e
 
-# folder where unpacked odn backup is placed
-BACKUP_DIR=odn_backup
+# set where BACKUP is placed
+if [ $# -eq 0 ]
+  then
+    echo "ERROR: Folder where backup file is placed is missing"
+    echo "example of usage:  ./restore /opt/odn_backup"
+    exit -1
+fi
+
+if [ ! -d "$1" ]; then
+    echo "ERROR: $1 is file or directory is not exist"
+    exit -1
+fi
+
+BACKUP_DIR=$1
 # debian packages
 cp -R $BACKUP_DIR/deb/sources.list* /etc/apt/
 apt-key add  $BACKUP_DIR/deb/repo.keys 
