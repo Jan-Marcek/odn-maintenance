@@ -40,5 +40,6 @@ cp theme/odn_theme_promoted.html /usr/share/python/odn-ckan-shared/lib/python2.7
 cp theme/odn_theme.css /usr/share/python/odn-ckan-shared/lib/python2.7/site-packages/ckanext/odn_theme/public/css/odn_theme.css
 cp theme/header.html /usr/share/python/odn-ckan-shared/lib/python2.7/site-packages/ckanext/odn_theme/templates/header.html
 cp theme/messages.properties  /usr/share/odn-cas/webapps/cas/WEB-INF/classes/messages.properties
+cp odn-simple-ssl /etc/apache2/sites-enabled/odn-simple-ssl
 service odn-cas restart
 service apache2 restart
