@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
-# debian packages
+
+# folder where unpacked odn backup is placed
 BACKUP_DIR=odn_backup
+# debian packages
 cp -R $BACKUP_DIR/deb/sources.list* /etc/apt/
 apt-key add  $BACKUP_DIR/deb/repo.keys 
 apt-get update
